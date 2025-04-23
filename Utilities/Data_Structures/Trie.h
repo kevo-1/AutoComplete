@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <set>
+#include <vector>
 
 class Node {
 public:
@@ -25,10 +26,13 @@ public:
     bool startsWith(std::string pre);
     void deleteWord(std::string word);
     void displayTrie();
+    std::vector<std::string> getWords(std::string word);
 
 private:
     void __displayTrieHelper(std::string pre, Node* node);
     std::string __sanitizeWord(std::string word);
+    void __DFSsearch(std::vector<std::string>& words, std::string currentWord);
+    void __BFSsearch(std::vector<std::string>& words, std::string currentWord);
 };
 
 #endif
