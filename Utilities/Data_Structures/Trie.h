@@ -31,8 +31,8 @@ public:
 private:
     void __displayTrieHelper(std::string pre, Node* node);
     std::string __sanitizeWord(std::string word);
-    void __DFSsearch(std::vector<std::string>& words, std::string currentWord);
-    void __BFSsearch(std::vector<std::string>& words, std::string currentWord);
+    void __DFSsearch(std::vector<std::string>& words, std::string currentWord, Node* node);
+    void __BFSsearch(std::vector<std::string>& words, std::string currentWord, Node* node);
 };
 
 #endif
