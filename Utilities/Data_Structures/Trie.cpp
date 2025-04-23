@@ -83,3 +83,7 @@ std::string Trie::__sanitizeWord(std::string word) {
     }
     return res;
 }
+
+std::vector<std::string> Trie::getWords(std::string prefix, int choice = 1) {
+    
+}
