@@ -1,5 +1,8 @@
 #include "Trie.h"
 #include <queue>
+#include <unordered_map>
+#include <utility>
+
 #define alphabet 26
 Node::Node() {
     endWord = false;
@@ -85,18 +88,14 @@ std::string Trie::__sanitizeWord(std::string word) {
     return res;
 }
 
-std::vector<std::string> Trie::getWords(std::string prefix, int choice = 1) {
+std::vector<std::string> Trie::getWords(std::string prefix, std::unordered_map<std::string, int> frequency,int choice = 0) {
     std::vector<std::string> result;
-    if(choice == 1) {
+    if (choice  == 0) {
+        __ByFrequency(result, prefix, root, frequency);
+    } else if(choice == 1) {
         __DFSsearch(result, prefix, root, 0);
     } else if (choice == 2) {
-        Node* node = root;
-        for(auto c: prefix) {
-            if(node->children[c-'a']) {
-                node = node->children[c-'a'];
-            }
-        }
-        __BFSsearch(result, prefix, node);
+        __BFSsearch(result, prefix, root);
     }
     return result;
 }
@@ -117,6 +116,11 @@ std::vector<std::string> Trie::getWords(std::string prefix, int choice = 1) {
 void Trie::__BFSsearch(std::vector<std::string>& words, std::string currentWord, Node* node) {
     if(!node){//if the root (the current node) is null then we return because the trie doesn't exist
         return;
+    }
+// Traverse to the end of the prefix
+    for (char c : currentWord) {
+        if (!node->children[c-'a']) return;  // Prefix not found
+        node = node->children[c-'a'];
     }
     std::queue<std::pair<Node*, std::string>> wordQueue;
     // start by queueing the current node and prefix
@@ -194,4 +198,46 @@ void Trie::__DFSsearch(std::vector<std::string>& words, std::string currentWord,
             }
             return __DFSsearch(words, currentWord, root,depth + 1);
         }
+}
+
+
+/**
+ * @brief get the words with the same prefix passed ordered by frequency of us
+ *  
+ * A Function that traverses all over the possible words and returns them ordered by frequence
+ * 
+ * @param words_vector a vector that contains the results of the search
+ * @param current_word the current word/prefix
+ * @param root the inital node of the trie
+ * @param frequency a hashmap of the number of occurences of the word
+ * 
+ * @author Peter & Kevin
+ * 
+ */
+void Trie::__ByFrequency(std::vector<std::string>& words, std::string currentWord, Node* node, std::unordered_map<std::string, int> frequency) {
+    // A lambda compartor to order the priority queue by the value of the pair descendingly (frequency)
+    auto cmp = [](const std::pair<std::string, int>& a, const std::pair<std::string, int>& b) {
+        return a.second < b.second; 
+    };
+
+    // Priority queue to sort the words
+    std::priority_queue<std::pair<std::string, int>, std::vector<std::pair<std::string, int>>, decltype(cmp)> orderedWords(cmp);
+
+    // Temporary vector to fetch the results in
+    std::vector<std::string> temp;
+    __BFSsearch(temp, currentWord, root);
+
+    // Emptying the fetched results from the search into the priority queue
+    for(auto a: temp) {
+        orderedWords.push({a, frequency[a]});
+    }
+
+    // Clearing the vector (as a precaution from previously fetched results)
+    words.clear();
+
+    // Emptying the priority queue with the results ordered into the results vector (words)
+    while (!orderedWords.empty()) {
+        words.push_back(orderedWords.top().first);
+        orderedWords.pop();
+    }
 }
