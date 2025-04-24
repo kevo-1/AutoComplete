@@ -6,23 +6,21 @@
 int main() {
     Trie tr;
     std::vector<std::string> words;
-    tr.insertWord("n");
-    tr.insertWord("ni");
-    tr.insertWord("nin");
-    tr.insertWord("ninj");
-    tr.insertWord("ninja");
+    tr.insertWord("program");
+    tr.insertWord("progress");
+    tr.insertWord("project");
+    tr.insertWord("promotion");
+    tr.insertWord("prototype");
+    tr.insertWord("process");
 
+    std::vector<std::string> temp = tr.getWords("pro", 1);
     tr.displayTrie();
-    std::cout<< tr.searchWord("ninja") << std::endl;
-    tr.deleteWord("ninja");
-    std::cout<< tr.searchWord("ninja") << std::endl;
-    
-    std::cout<< tr.startsWith("ninj") << std::endl;
-    tr.deleteWord("ninj");
-    std::cout<< tr.startsWith("ninj") << std::endl;
-    tr.displayTrie();
-    tr.__DFSsearch(words,"ni",tr.root,0);
-    for (int i = 0 ; i < words.size();i++){
-        std::cout<<words[i]<<std::endl;
+    for(auto c: temp) {
+        std::cout<<c<<std::endl;
     }
+    // temp = tr.getWords("pro", 2);
+    // tr.displayTrie();
+    // for(auto c: temp) {
+    //     std::cout<<c<<std::endl;
+    // }
 }

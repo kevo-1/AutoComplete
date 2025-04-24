@@ -86,7 +86,19 @@ std::string Trie::__sanitizeWord(std::string word) {
 }
 
 std::vector<std::string> Trie::getWords(std::string prefix, int choice = 1) {
-    
+    std::vector<std::string> result;
+    if(choice == 1) {
+        __DFSsearch(result, prefix, root, 0);
+    } else if (choice == 2) {
+        Node* node = root;
+        for(auto c: prefix) {
+            if(node->children[c-'a']) {
+                node = node->children[c-'a'];
+            }
+        }
+        __BFSsearch(result, prefix, node);
+    }
+    return result;
 }
 
 
@@ -118,14 +130,15 @@ void Trie::__BFSsearch(std::vector<std::string>& words, std::string currentWord,
 
         //If the node we are currently on is the end of a word then add it to our vector of words
         if(currNode->endWord)
-            words.push_back(currentWord);
+            words.push_back(word);
 
         //Loop all over the 26 children (letters)
         for (int i = 0; i < 26; i++)
         {
             //If the node has any children then add the node's child and the current word we have + the letter to the queue of the BFS  
-            if(node->children[i]){
-                wordQueue.push({currNode->children[i], currentWord+char('a'+i)});
+            if(currNode->children[i]){
+                char temp = 'a'+i;
+                wordQueue.push({currNode->children[i], word+temp});
             } 
         }
     }
