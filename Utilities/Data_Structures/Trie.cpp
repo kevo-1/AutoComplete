@@ -1,6 +1,5 @@
 #include "Trie.h"
-#include <queue>
-
+#define alphabet 26 //define the number of alphabet to use it throuout the code
 Node::Node() {
     endWord = false;
     for (int i = 0; i < 26; i++) {
@@ -34,7 +33,7 @@ bool Trie::searchWord(std::string word) {
     return dummy->endWord;
 }
 
-bool Trie::startsWith(std::string pre) {
+bool Trie::startsWith(std::string pre) {//the same as search prefix
     Node* dummy = root;
     pre = __sanitizeWord(pre);
     for (auto ch : pre) {
@@ -85,45 +84,53 @@ std::string Trie::__sanitizeWord(std::string word) {
     return res;
 }
 
-std::vector<std::string> Trie::getWords(std::string prefix, int choice = 1) {
-    
-}
-
-
-/**
- * @brief BFS Traversing to get the words with the same prefix passed
- *  
- * A Function that traverses all over the possible words and returns them ordered by length of word
- * 
- * @param words_vector a vector that contains the results of the search
- * @param current_word the current word/prefix
- * @param node
- * 
- * @author Kevin
- * 
- */
-void Trie::__BFSsearch(std::vector<std::string>& words, std::string currentWord, Node* node) {
-    std::queue<std::pair<Node*, std::string>> wordQueue;
-    // start by queueing the current node and prefix
-    wordQueue.push({node, currentWord});
-
-    // here we will start our BFS Traversing
-    while (!wordQueue.empty()) {
-        //Unpack the current pair from the queue and assign the values to variables
-        auto [currNode, word] = wordQueue.front();
-        wordQueue.pop();
-
-        //If the node we are currently on is the end of a word then add it to our vector of words
-        if(currNode->endWord)
-            words.push_back(currentWord);
-
-        //Loop all over the 26 children (letters)
-        for (int i = 0; i < 26; i++)
-        {
-            //If the node has any children then add the node's child and the current word we have + the letter to the queue of the BFS  
-            if(node->children[i]){
-                wordQueue.push({currNode->children[i], currentWord+char('a'+i)});
-            } 
-        }
+// Node* Trie::__lastNodeFinder(std::string currentWord,Node* root) {
+//     int index;
+//     for(char c : currentWord){
+//         index = c - 'a';
+//         if(root->children[index] == nullptr){
+//             return nullptr;
+//         }
+//         root = root->children[index];
+//     }
+//     return root;
+// }
+void Trie::__DFSsearch(std::vector<std::string>& words, std::string currentWord, Node *root,int depth = 0){
+    if(!root){//if the root (the current node) is null then we return because the trie doesn't exist
+        return;
     }
+    //if the root is an end of a word then we add the current word to the vector even if it is the same as the prefix given
+    if(root->endWord){
+        words.push_back(currentWord);
+    }
+    //loop over every child from 0 to 25 (so in lexicographical order)
+    // and if we find one we enter it with additional depth and add it to the current word before the calling of the function
+    //so it will visit the next node(vertex) with out exploring the whole current node (Deapth first search) and then when it hits a leaf
+    //it returns one at a time and coninue exploring the last node so it simulates a stack functionality without using a stack FILO/LIFO
+    //as the funciton return to the last node it left, and the function progress recursively
+    //note : this part is executed if and only if the root (current node) is the last node in the current word
+    if(depth = currentWord.length()){
+            for(int i = 0 ; i < alphabet; i++){
+                if(root->children[i]){
+                    __DFSsearch(words , currentWord += ('a' + i),root->children[i], depth + 1);
+                }
+        }
+        return;
+    }
+    // this part is to be executed before the code above to increment the depth and to pass the last node in the current word
+    //the current word doesn't change here because the intial currnet word already has all the letters till the last one in
+    //the intial current word (prefix) and so we get the root as the last letter and the depth as the number of letters in
+    //the current word and then enters the function again to start with the right depth and the root
+    else{
+            int index;
+            for(char c : currentWord){
+                index = c - 'a';
+                if(root->children[index] == nullptr){
+                    return ;
+                }
+                root = root->children[index];
+                depth+=1;
+            }
+            return __DFSsearch(words, currentWord, root,depth);
+        }
 }

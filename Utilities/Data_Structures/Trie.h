@@ -16,7 +16,7 @@ public:
 
 class Trie {
 private:
-    Node* root;
+    Node* root;//was private
     std::set<char> validChar = {'-', '_', '\'', '\"'};
 
 public:
@@ -26,13 +26,13 @@ public:
     bool startsWith(std::string pre);
     void deleteWord(std::string word);
     void displayTrie();
-    std::vector<std::string> getWords(std::string prefix, int choice = 1);
-
-private:
+    std::vector<std::string> getWords(std::string word);
+    
+    private:
     void __displayTrieHelper(std::string pre, Node* node);
     std::string __sanitizeWord(std::string word);
-    void __DFSsearch(std::vector<std::string>& words, std::string currentWord, Node* node);
-    void __BFSsearch(std::vector<std::string>& words, std::string currentWord, Node* node);
+    void __DFSsearch(std::vector<std::string>& words, std::string currentWord, Node * root , int depth);
+    void __BFSsearch(std::vector<std::string>& words, std::string currentWord);
 };
 
 #endif
