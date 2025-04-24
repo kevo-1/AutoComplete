@@ -1,6 +1,6 @@
 #include "Trie.h"
 #include <queue>
-
+#define alphabet 26
 Node::Node() {
     endWord = false;
     for (int i = 0; i < 26; i++) {
@@ -103,6 +103,9 @@ std::vector<std::string> Trie::getWords(std::string prefix, int choice = 1) {
  * 
  */
 void Trie::__BFSsearch(std::vector<std::string>& words, std::string currentWord, Node* node) {
+    if(!node){//if the root (the current node) is null then we return because the trie doesn't exist
+        return;
+    }
     std::queue<std::pair<Node*, std::string>> wordQueue;
     // start by queueing the current node and prefix
     wordQueue.push({node, currentWord});
@@ -126,4 +129,56 @@ void Trie::__BFSsearch(std::vector<std::string>& words, std::string currentWord,
             } 
         }
     }
+}
+
+/**
+ * @brief DFS Traversing to get the words with the same prefix passed
+ *  
+ * A Function that traverses all over the possible words and returns them ordered lexicographically
+ * 
+ * @param words_vector a vector that contains the results of the search
+ * @param current_word the current word/prefix
+ * @param root the inital node of the trie
+ * @param depth the level of the tree the funciton is at
+ * 
+ * @author Mario
+ * 
+ */
+void Trie::__DFSsearch(std::vector<std::string>& words, std::string currentWord, Node *root,int depth = 0){
+    if(!root){//if the root (the current node) is null then we return because the trie doesn't exist
+        return;
+    }
+    //if the root is an end of a word then we add the current word to the vector even if it is the same as the prefix given
+    if(root->endWord){
+        words.push_back(currentWord);
+    }
+    //{loop over every child from 0 to 25 (so in lexicographical order)
+    // and if we find one we enter it with additional depth and add it to the current word before the calling of the function
+    //so it will visit the next node(vertex) with out exploring the whole current node (Deapth first search) and then when it hits a leaf
+    //it returns one at a time and coninue exploring the last node so it simulates a stack functionality without using a stack FILO/LIFO
+    //as the funciton return to the last node it left, and the function progress recursively
+    //note : this part is executed if and only if the root (current node) is the last node in the current word}
+    if(depth = currentWord.length()){
+            for(int i = 0 ; i < alphabet; i++){
+                if(root->children[i]){
+                    __DFSsearch(words , currentWord += char('a' + i),root->children[i], depth + 1);
+                }
+        }
+        return;
+    }
+    // {this part is to be executed before the code above to increment the depth and to pass the last node in the current word
+    //the current word doesn't change here because the intial currnet word already has all the letters till the last one in
+    //the intial current word (prefix) and so we get the root as the last letter and the depth as the number of letters in
+    //the current word and then enters the function again to start with the right depth and the root}
+    else{
+            int index;
+            for(char c : currentWord){
+                index = c - 'a';
+                if(root->children[index] == nullptr){
+                    return ;
+                }
+                root = root->children[index];
+            }
+            return __DFSsearch(words, currentWord, root,depth + 1);
+        }
 }
