@@ -4,11 +4,11 @@
 #include <DataFetcher.h>
 
 
-DataFetcher::DataFetcher() : dictionary(path, std::ios::in | std::ios::out) {
-    try {
-        this->dictionary.open(path);
-    } catch(std::exception& e) {
-        std::cerr << e.what() << '\n';
+DataFetcher::DataFetcher() : path("../../Storage/Dictionary.txt") {
+    dictionary.open(path, std::ios::in | std::ios::out);
+    if (!dictionary.is_open()) {
+        std::cerr << "ERROR: Failed to open file at: " << path << std::endl;
+        throw std::runtime_error("Failed to open file: " + path);
     }
 }
 
@@ -33,6 +33,8 @@ void DataFetcher::SaveFrequency(std::unordered_map<std::string, int> data) {
 }
 
 DataFetcher::~DataFetcher() {
-    // Nothing special unless you manually allocate memory
+    if(dictionary.is_open()) {
+        dictionary.close();
+    }
 }
 

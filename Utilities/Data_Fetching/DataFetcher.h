@@ -19,7 +19,7 @@ private:
 
 public:
     std::unordered_map<std::string, int> frequency;  // Frequency map to store word counts
-    std::string path = "AutoComplete/Storage/Dictionary.txt";  // Path to dictionary file
+    std::string path = "../Storage/Dictionary.txt";  // Path to dictionary file
 
     // Constructor and Destructor declarations
     DataFetcher();

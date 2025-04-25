@@ -27,6 +27,9 @@ int main() {
     for(auto& [word, fre] : freq) {
         std::cout<<word<<" "<<fre<<'\n';
     }
+    freq["'ninja'"] = 10;
+    freq["'chicken'"] = 92;
+    df.SaveFrequency(freq);
     // temp = tr.getWords("pro", 2);
     // tr.displayTrie();
     // for(auto c: temp) {
