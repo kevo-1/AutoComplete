@@ -81,8 +81,6 @@ std::string Trie::__sanitizeWord(std::string word) {
     for (auto i : word) {
         if (isalpha(i)) {
             res += (islower(i) ? i : tolower(i));
-        } else if (validChar.find(i) != validChar.end()) {
-            res += i;
         }
     }
     return res;

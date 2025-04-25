@@ -18,7 +18,6 @@ public:
 class Trie {
 private:
     Node* root;//was private
-    std::set<char> validChar = {'-', '_', '\'', '\"'};
 
 public:
     Trie();
