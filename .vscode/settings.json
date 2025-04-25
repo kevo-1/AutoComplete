@@ -61,6 +61,7 @@
     "xutility": "cpp",
     "unordered_map": "cpp",
     "list": "cpp",
-    "xhash": "cpp"
+    "xhash": "cpp",
+    "fstream": "cpp"
   }
 }
