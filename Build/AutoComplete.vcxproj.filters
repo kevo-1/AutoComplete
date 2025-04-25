@@ -4,6 +4,9 @@
     <ClCompile Include="D:\Projects\AutoComplete\SRC\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="D:\Projects\AutoComplete\Utilities\Data_Fetching\DataFetcher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="D:\Projects\AutoComplete\Utilities\Data_Structures\Trie.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

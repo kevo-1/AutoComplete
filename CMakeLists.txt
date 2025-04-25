@@ -10,13 +10,14 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 # Recursively collect source files
 file(GLOB_RECURSE SRC_FILES
     ${CMAKE_SOURCE_DIR}/SRC/*.cpp
-    ${CMAKE_SOURCE_DIR}/Utilities/**/*.cpp
+    ${CMAKE_SOURCE_DIR}/Utilities/Data_Structures/*.cpp 
+    ${CMAKE_SOURCE_DIR}/Utilities/Data_Fetching/*.cpp   
 )
 
 # Include directories for headers
 include_directories(
     ${CMAKE_SOURCE_DIR}/Utilities/Data_Structures
-    ${CMAKE_SOURCE_DIR}/Utilities/Data_Fetcher
+    ${CMAKE_SOURCE_DIR}/Utilities/Data_Fetching
 )
 
 # Define the executable

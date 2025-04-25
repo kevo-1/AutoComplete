@@ -1,19 +1,33 @@
+#ifndef DATAFETCHER_H
+#define DATAFETCHER_H
+
 #include <iostream>
 #include <fstream>
 #include <unordered_map>
 
+/**
+ * @class DataFetcher
+ * @brief Data writing and reading
+ *  
+ * A Class to handle loading the dictionary of previously used words and save them when done
+ *
+ * @author Peter & Kevin
+ */
 class DataFetcher {
+private:
+    std::fstream dictionary;  // File stream for dictionary
+
 public:
-    private:
-        std::fstream dictionary;
+    std::unordered_map<std::string, int> frequency;  // Frequency map to store word counts
+    std::string path = "AutoComplete/Storage/Dictionary.txt";  // Path to dictionary file
 
-    public:
-        std::unordered_map<std::string, int> frequency;
-        std::string path = "AutoComplete\Storage\Dictionary.txt";
+    // Constructor and Destructor declarations
+    DataFetcher();
+    ~DataFetcher();
 
-        DataFetcher(){};
-        std::unordered_map<std::string, int> dictionaryMap() {};
-        std::unordered_map<std::string, int> LoadFrequency() {};
-        void SaveFrequency(std::unordered_map<std::string, int> data) {};
+    // Methods to load and save frequency data
+    std::unordered_map<std::string, int> LoadFrequency();
+    void SaveFrequency(std::unordered_map<std::string, int> data);
 };
 
+#endif  // DATAFETCHER_H
