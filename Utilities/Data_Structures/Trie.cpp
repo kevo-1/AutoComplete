@@ -173,10 +173,10 @@ void Trie::__DFSsearch(std::vector<std::string>& words, std::string currentWord,
     //it returns one at a time and coninue exploring the last node so it simulates a stack functionality without using a stack FILO/LIFO
     //as the funciton return to the last node it left, and the function progress recursively
     //note : this part is executed if and only if the root (current node) is the last node in the current word}
-    if(depth = currentWord.length()){
+    if(depth == currentWord.length()){
             for(int i = 0 ; i < alphabet; i++){
                 if(root->children[i]){
-                    __DFSsearch(words , currentWord += char('a' + i),root->children[i], depth + 1);
+                    __DFSsearch(words , currentWord + char('a' + i),root->children[i], depth + 1);
                 }
         }
         return;
