@@ -162,11 +162,13 @@ void Trie::__BFSsearch(std::vector<std::string>& words, std::string currentWord,
 void Trie::__DFSsearch(std::vector<std::string>& words, std::string currentWord, Node *root,int depth = 0){
     if(!root){//if the root (the current node) is null then we return because the trie doesn't exist
         return;
-    }
+    }//pro(cess)
     //if the root is an end of a word then we add the current word to the vector even if it is the same as the prefix given
+    if(!(depth < currentWord.length())){
     if(root->endWord){
         words.push_back(currentWord);
     }
+}
     //{loop over every child from 0 to 25 (so in lexicographical order)
     // and if we find one we enter it with additional depth and add it to the current word before the calling of the function
     //so it will visit the next node(vertex) with out exploring the whole current node (Deapth first search) and then when it hits a leaf
