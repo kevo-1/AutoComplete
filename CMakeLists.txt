@@ -2,11 +2,23 @@ cmake_minimum_required(VERSION 3.10)
 project(AutoComplete)
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Set output directory for the executable to the project root
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
+# Output directory for the executable
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
-add_executable(AutoComplete 
-    SRC/main.cpp
-    Utilities/Data_Structures/Trie.cpp
+# Recursively collect source files
+file(GLOB_RECURSE SRC_FILES
+    ${CMAKE_SOURCE_DIR}/SRC/*.cpp
+    ${CMAKE_SOURCE_DIR}/Utilities/Data_Structures/*.cpp 
+    ${CMAKE_SOURCE_DIR}/Utilities/Data_Fetching/*.cpp   
 )
+
+# Include directories for headers
+include_directories(
+    ${CMAKE_SOURCE_DIR}/Utilities/Data_Structures
+    ${CMAKE_SOURCE_DIR}/Utilities/Data_Fetching
+)
+
+# Define the executable
+add_executable(AutoComplete ${SRC_FILES})

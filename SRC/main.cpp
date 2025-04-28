@@ -1,22 +1,38 @@
-#include "Utilities\Data_Structures\Trie.h"
+#include "../Utilities/Data_Structures/Trie.h"
+#include "../Utilities/Data_Fetching/DataFetcher.h"
 #include <iostream>
+#include <vector>
+#include<string>
+#include<unordered_map>
 
 int main() {
     Trie tr;
-
-    tr.insertWord("n");
-    tr.insertWord("ni");
-    tr.insertWord("nin");
-    tr.insertWord("ninj");
+    DataFetcher df;
+    std::vector<std::string> words;
+    tr.insertWord("program");
+    tr.insertWord("progress");
+    tr.insertWord("project");
+    tr.insertWord("promotion");
+    tr.insertWord("prototype");
+    tr.insertWord("process");
+    tr.insertWord("priority");
+    tr.insertWord("problem");
+    tr.insertWord("prediction");
+    tr.insertWord("proceed");
+    tr.insertWord("processing");
     tr.insertWord("ninja");
 
-    tr.displayTrie();
-    std::cout<< tr.searchWord("ninja") << std::endl;
-    tr.deleteWord("ninja");
-    std::cout<< tr.searchWord("ninja") << std::endl;
-    
-    std::cout<< tr.startsWith("ninj") << std::endl;
-    tr.deleteWord("ninj");
-    std::cout<< tr.startsWith("ninj") << std::endl;
-    tr.displayTrie();
+    std::unordered_map<std::string, int> freq;
+    freq = df.LoadFrequency();
+    for(auto& [word, fre] : freq) {
+        std::cout<<word<<" "<<fre<<'\n';
+    }
+    freq["'ninja'"] = 10;
+    freq["'chicken'"] = 92;
+    df.SaveFrequency(freq);
+    // temp = tr.getWords("pro", 2);
+    // tr.displayTrie();
+    // for(auto c: temp) {
+    //     std::cout<<c<<std::endl;
+    // }
 }
