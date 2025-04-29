@@ -215,6 +215,8 @@ void Trie::__DFSsearch(std::vector<std::string>& words, std::string currentWord,
  * 
  */
 void Trie::__ByFrequency(std::vector<std::string>& words, std::string currentWord, Node* node, std::unordered_map<std::string, int> frequency) {
+    (void)node;
+
     // A lambda compartor to order the priority queue by the value of the pair descendingly (frequency)
     auto cmp = [](const std::pair<std::string, int>& a, const std::pair<std::string, int>& b) {
         return a.second < b.second; 

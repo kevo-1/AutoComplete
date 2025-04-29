@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <unordered_map>
+#include <filesystem>
 
 /**
  * @class DataFetcher
@@ -19,7 +20,7 @@ private:
 
 public:
     std::unordered_map<std::string, int> frequency;  // Frequency map to store word counts
-    std::string path = "../Storage/Dictionary.txt";  // Path to dictionary file
+    std::filesystem::path path;
 
     // Constructor and Destructor declarations
     DataFetcher();
