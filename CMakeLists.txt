@@ -11,15 +11,13 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 file(GLOB_RECURSE SRC_FILES
     ${CMAKE_SOURCE_DIR}/SRC/*.cpp
     ${CMAKE_SOURCE_DIR}/Utilities/Data_Structures/*.cpp 
-    ${CMAKE_SOURCE_DIR}/Utilities/Data_Fetching/*.cpp
-    ${CMAKE_SOURCE_DIR}/Utilities/Input_Handling/*.cpp 
+    ${CMAKE_SOURCE_DIR}/Utilities/Data_Fetching/*.cpp   
 )
 
 # Include directories for headers
 include_directories(
     ${CMAKE_SOURCE_DIR}/Utilities/Data_Structures
     ${CMAKE_SOURCE_DIR}/Utilities/Data_Fetching
-    ${CMAKE_SOURCE_DIR}/Input_Handling           
 )
 
 # Define the executable
