@@ -63,7 +63,10 @@ void LiveInput::startLiveInput()
         std::cout << "Suggested words: \n";
         std::vector<std::string> words = getMatchingWords(input, 0);
         for (int i = 0; i < words.size(); i++) {
-            std::cout << "[" << i + 1 << "] " << words[i] << std::endl;
+            std::cout << "[" << i + 1 << "] " << words[i] << "  ";
+            if (i % 5){
+                std::cout << std::endl;
+            }
         }
     }
     setBufferedInput(true); // re-enable buffering before exiting
@@ -71,7 +74,7 @@ void LiveInput::startLiveInput()
 void LiveInput::updateWordFrequency(std::string word)
 {
     freq[word]++;
-    if (freq[word] == 3) {
+    if (freq[word] == 3) { // Insert the word into the Trie only when it is repeated exactly 3 times
         mytrie.insertWord(word);
     }
 }
@@ -140,8 +143,6 @@ std::string LiveInput::sanitizeWord(std::string input) {
 /// @author Belal
 std::vector<std::string> LiveInput::getMatchingWords(std::string input, int searchType = 0){
     std::string lastWord = sanitizeWord(input);
-    //debug
-    std::cout <<"last word: " << lastWord << std::endl;
     std::vector<std::string> result;
     if(lastWord.empty()) return {};
     updateWordFrequency(lastWord);
@@ -177,19 +178,33 @@ void LiveInput::chooseSuggestedWord(std::string input){
     int choice = 0;
     while (true) {
         std::cin >> choice;
-        if (choice >= 1 || choice <= words.size()) {
+        if (std::cin.fail()) {
+            std::cin.clear(); // Clear the error flag
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
+            std::cout << "Invalid input. Please enter a number: ";
+            continue;
+        }
+        if (choice >= 1 && choice <= words.size()) {
             break;
         }
-        std::cout << "Invalid choice. Please try again: ";
+        std::cout << "Invalid input. Please enter a number: ";
     }
     std::cout << "Choose operation: \n[1] Insert\n[2] Delete\n[3] Cancel\n";
     int opChoice = 0;
     while (true) {
         std::cin >> opChoice;
-        if (opChoice == 1 || opChoice == 2 || opChoice == 3) {
-            break;
+        if (std::cin.fail()) {
+            std::cin.clear(); // Clear the error flag
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
+            std::cout << "Invalid input. Please enter a number (1, 2, or 3): ";
+            continue;
         }
-        std::cout << "Invalid choice. Please try again: ";
+        if (opChoice == 1 || opChoice == 2 || opChoice == 3) break;
+        std::cout << "Invalid choice. Please enter 1 for Insert, 2 for Delete, or 3 to Cancel: ";
+    }
+    if (opChoice == 3) {
+        std::cout << "Operation cancelled.\n";
+        return;
     }
     std::cout << ((performOperation(words[choice - 1], opChoice) == 1)? "Operation successful!" : "Operation failed!");
     std::cout << "\n============================\n";
