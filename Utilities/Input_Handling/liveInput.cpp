@@ -36,20 +36,19 @@ void LiveInput::startLiveInput()
     char c;
     while (true) {
         c = getChar();
-        if(c == ESCAPE) break;
+        if (c == ENTER_KEY || c == CARRIAGE_RETURN || c == ESCAPE) break;
         input.append(1, c);
         if (c == TAB){
             chooseSuggestedWord(input);
             continue;
         }
-        if (c == ENTER_KEY || c == CARRIAGE_RETURN) break;
         if (c == SPACE) {
             currentWord = sanitizeWord(input);
-            if (!currentWord.empty())
-            {
-                updateWordFrequency(currentWord);
-                currentWord.clear();
+            if (freq.find(currentWord) == freq.end()) {
+                freq[currentWord] = 0;
             }
+            updateWordFrequency(currentWord);
+                currentWord.clear();
         }
 
 #ifdef _WIN32
@@ -64,7 +63,7 @@ void LiveInput::startLiveInput()
         std::vector<std::string> words = getMatchingWords(input, 0);
         for (int i = 0; i < words.size(); i++) {
             std::cout << "[" << i + 1 << "] " << words[i] << "  ";
-            if (i % 5){
+            if ((i + 1) % 5 == 0){
                 std::cout << std::endl;
             }
         }
@@ -169,11 +168,8 @@ int LiveInput::performOperation(std::string wordChoice, int opChoice){
 
 void LiveInput::chooseSuggestedWord(std::string input){
     std::cout << "\n============================\n";
-    std::cout << "Suggested words: \n";
     std::vector<std::string> words = getMatchingWords(input, 0);
-    for (int i = 0; i < words.size(); i++) {
-        std::cout << "[" << i + 1 << "] " << words[i] << std::endl;
-    }
+    
     std::cout << "Choose a word by entering its number : ";
     int choice = 0;
     while (true) {
@@ -185,6 +181,7 @@ void LiveInput::chooseSuggestedWord(std::string input){
             continue;
         }
         if (choice >= 1 && choice <= words.size()) {
+            std::cout << "You chose: " << words[choice - 1] << "\n";
             break;
         }
         std::cout << "Invalid input. Please enter a number: ";
