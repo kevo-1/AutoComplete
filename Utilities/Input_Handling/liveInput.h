@@ -18,6 +18,8 @@ private:
     const char SPACE = ' ';
     const char ESCAPE = 27;
     const char TAB = '\t';
+    const char BACKSPACE = 8;
+    const char DELETE = 127;
     void setBufferedInput(bool enable); 
     char getChar(void);
     void updateWordFrequency(std::string word);

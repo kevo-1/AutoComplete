@@ -36,17 +36,17 @@ void LiveInput::startLiveInput()
     char c;
     while (true) {
         c = getChar();
-        if (c == ENTER_KEY || c == CARRIAGE_RETURN || c == ESCAPE) break;
         input.append(1, c);
+        if (c == ENTER_KEY || c == CARRIAGE_RETURN || c == ESCAPE) break;
+        else if(c == BACKSPACE || c == DELETE){
+            // not implemented yet
+        }
         if (c == TAB){
             chooseSuggestedWord(input);
             continue;
         }
         if (c == SPACE) {
             currentWord = sanitizeWord(input);
-            if (freq.find(currentWord) == freq.end()) {
-                freq[currentWord] = 0;
-            }
             updateWordFrequency(currentWord);
                 currentWord.clear();
         }
