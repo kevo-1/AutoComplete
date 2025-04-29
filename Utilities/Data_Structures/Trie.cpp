@@ -86,7 +86,8 @@ std::string Trie::__sanitizeWord(std::string word) {
     return res;
 }
 
-std::vector<std::string> Trie::getWords(std::string prefix, std::unordered_map<std::string, int> frequency,int choice = 0) {
+// send by reference...
+std::vector<std::string> Trie::getWords(std::string prefix, std::unordered_map<std::string, int>& frequency,int choice = 0) {
     std::vector<std::string> result;
     if (choice  == 0) {
         __ByFrequency(result, prefix, root, frequency);

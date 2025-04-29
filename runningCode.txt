@@ -1,6 +1,10 @@
-# Running Code
+do this at AutoComplete\:
+> mkdir Build
+> cd Build 
+> cmake .. -DCMAKE_BUILD_TYPE=Debug
+> cmake --build . --verbose
 
-mkdir Build
-cd Build
-cmake .. -DCMAKE_BUILD_TYPE=Debug
-cmake --build . --verbose
+to rebuild this locating at bin\Debug:
+> cd ..\..
+> rmdir /s /q Build
+> rmdir /s /q bin
