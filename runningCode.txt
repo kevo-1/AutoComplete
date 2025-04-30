@@ -3,7 +3,7 @@ mkdir Build
 cd Build 
 cmake .. -DCMAKE_BUILD_TYPE=Debug
 cmake --build . --verbose
-cd ..\bin\Debug
+
 AutoComplete.exe
 
 

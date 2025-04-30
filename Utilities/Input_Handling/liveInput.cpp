@@ -87,7 +87,7 @@ void LiveInput::startLiveInput()
         std::vector<std::string> words = getMatchingWords(input, 0);
         for (int i = 0; i < words.size(); i++)
         {
-            displayWord(i,words[i],input);
+            displayWord(i,input,words[i]);
             if ((i + 1) % 5 == 0)
             {
                 std::cout << std::endl;
