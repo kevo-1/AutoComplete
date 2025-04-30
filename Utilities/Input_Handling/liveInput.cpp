@@ -37,7 +37,7 @@ LiveInput::LiveInput(Trie &tr, std::unordered_map<std::string, int> *frequency) 
 void LiveInput::displayWord(int index,std::string input,std::string word){
     if (sanitizeWord(input)==word)
             {
-                std::cout << "\033[30m\033[43m[" << index + 1 << "] " << word << " \033[0m\n  ";
+                std::cout << "\033[30m\033[43m[" << index + 1 << "] " << word << " \033[0m  ";
             }else{
                 std::cout << "[" << index + 1 << "] " << word << "  ";
             }
