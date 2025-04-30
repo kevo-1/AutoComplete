@@ -12,6 +12,15 @@
 #include <termios.h>
 #include <unistd.h>
 #endif
+//Belal
+//delete from map along with the trie[]
+//insert(hat7ott el word in the trie+in the map with freq=3 if it doesn't exist)[]
+
+
+//ramy
+//backspace[]
+//complete the rest of the suggested word[]
+
 
 /// @brief Constructor for LiveInput class
 /// @details Initializes the LiveInput object with a Trie and a frequency map.
