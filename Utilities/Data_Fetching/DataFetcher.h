@@ -27,7 +27,7 @@ public:
 
     // Methods to load and save frequency data
     std::unordered_map<std::string, int> LoadFrequency();
-    void SaveFrequency(std::unordered_map<std::string, int> data);
+    void SaveFrequency(std::unordered_map<std::string, int> &data);
 };
 
 #endif  // DATAFETCHER_H

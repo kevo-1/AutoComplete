@@ -29,14 +29,18 @@ int main() {
         std::cout<<word<<" "<<fre<<'\n';
     }
 
-    LiveInput myInput(tr, freq);
+    LiveInput myInput(tr, &freq);
     myInput.startLiveInput();
     freq["'ninja'"] = 10;
-    freq["'chicken'"] = 92;
+    freq["'chicken'"] = 82;
+    for(auto& [word, fre] : freq) {
+        std::cout<<word<<" "<<fre<<'\n';
+    }
     df.SaveFrequency(freq);
     // temp = tr.getWords("pro", 2);
     // tr.displayTrie();
     // for(auto c: temp) {
     //     std::cout<<c<<std::endl;
     // }
+
 }

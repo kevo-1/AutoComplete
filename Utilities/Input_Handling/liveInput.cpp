@@ -18,10 +18,10 @@
 /// @param trie
 /// @param frequency
 /// @author Belal
-LiveInput::LiveInput(Trie &tr, std::unordered_map<std::string, int> frequency) : mytrie{tr}, freq{frequency}
+LiveInput::LiveInput(Trie &tr, std::unordered_map<std::string, int> *frequency) : mytrie{tr}, freq{frequency}
 {
     tr.displayTrie();
-    if (freq.empty())
+    if (freq->empty())
     {
         std::cout << "No words in the frequency map.\n";
     }
@@ -98,8 +98,9 @@ void LiveInput::startLiveInput()
 }
 void LiveInput::updateWordFrequency(std::string word)
 {
-    freq[word]++;
-    if (freq[word] == 3)
+    (*freq)[word]++;
+    int freqnum=(*freq)[word];
+    if (freqnum == 3)
     { // Insert the word into the Trie only when it is repeated exactly 3 times
         mytrie.insertWord(word);
     }
@@ -179,8 +180,8 @@ std::vector<std::string> LiveInput::getMatchingWords(std::string input, int sear
     std::vector<std::string> result;
     if (lastWord.empty())
         return {};
-    updateWordFrequency(lastWord);
-    result = mytrie.getWords(lastWord, freq, searchType);
+    //updateWordFrequency(lastWord);
+    result = mytrie.getWords(lastWord, *freq, searchType);
     return result;
 }
 

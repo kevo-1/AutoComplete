@@ -22,7 +22,7 @@ std::unordered_map<std::string, int> DataFetcher::LoadFrequency() {
     return this->frequency;
 }
 
-void DataFetcher::SaveFrequency(std::unordered_map<std::string, int> data) {
+void DataFetcher::SaveFrequency(std::unordered_map<std::string, int>& data) {
     std::ofstream file(path, std::ios::out | std::ios::trunc);
     if (!file.is_open()) {
         throw std::runtime_error("Failed to open file: " + path);

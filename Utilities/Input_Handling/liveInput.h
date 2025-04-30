@@ -34,8 +34,8 @@ private:
 
 public:
     Trie mytrie;
-    std::unordered_map<std::string, int> freq;
-    LiveInput(Trie &mytrie, std::unordered_map<std::string, int>);
+    std::unordered_map<std::string, int> * freq;
+    LiveInput(Trie &mytrie, std::unordered_map<std::string, int> *frequency);
     void startLiveInput();
     /*done: choice 1 insert data in the tree from suggested text choice 2 delete word*/
     std::vector<std::string> getMatchingWords(std::string input, int searchType);

@@ -9,4 +9,5 @@ problem 65
 prediction 5
 proceed 40
 'ninja' 10
-'chicken' 92
+'chicken' 82
+as 4
