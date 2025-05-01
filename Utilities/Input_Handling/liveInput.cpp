@@ -95,6 +95,8 @@ void LiveInput::startLiveInput()
             updateWordFrequency(currentWord);
             currentWord.clear();
         }
+
+        //choosing order type(searchType)
         if (c=='0')
         {
             searchType=0;
@@ -108,6 +110,7 @@ void LiveInput::startLiveInput()
             searchType=2;
         }
 
+        //moved this here in order to use it in completing using suggestions
         std::vector<std::string> words = getMatchingWords(input, searchType);
         
         // replaceWithSuggestion(words,input,c);
@@ -158,7 +161,7 @@ void LiveInput::startLiveInput()
         std::cout << "\n============================\n";
         std::cout << "Suggested words: \n";
         
-        
+        //added upper bound: 9 bec i only have numbers 1-9 to chose from in completion
         for (int i = 0; i < words.size() && i<9; i++)
         {
             displayWord(i,input,words[i]);
