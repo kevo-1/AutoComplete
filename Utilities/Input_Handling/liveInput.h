@@ -21,15 +21,19 @@ private:
     const char TAB = '\t';
     const char BACKSPACE = 8;
     const char DELETE = 127;
+    const char BACKSLASH=92;
     void setBufferedInput(bool enable);
     char getChar(void);
     void updateWordFrequency(std::string word);
+    // int  isOneThroughNine(char c);
+    // void replaceWithSuggestion(std::vector<std::string> words,std::string input,char c);
+
     /*done input manipulation functions.. takes a whole string in
     getMatchWords -> getLastWord -> sanitize gives back a word in lowercase english.
     no special characters*/
     std::string getLastWord(std::string input);
     std::string sanitizeWord(std::string input);
-    void chooseSuggestedWord(std::string);
+    void chooseSuggestedWord(std::string input,int searchType);
     void displayWord(int index,std::string input,std::string word);
 
 public:

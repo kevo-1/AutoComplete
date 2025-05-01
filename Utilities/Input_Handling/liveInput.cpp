@@ -5,6 +5,7 @@
 #include "liveInput.h"
 #include <vector>
 #include <string>
+#include<cctype>
 #include "../Data_Structures/Trie.h"
 #ifdef _WIN32
 #include <conio.h>
@@ -18,8 +19,8 @@
 
 
 //ramy
-//backspace[]
-//complete the rest of the suggested word[]
+//backspace[done]
+//complete the rest of the suggested word[done]
 
 
 /// @brief Constructor for LiveInput class
@@ -35,6 +36,10 @@ LiveInput::LiveInput(Trie &tr, std::unordered_map<std::string, int> *frequency) 
         std::cout << "No words in the frequency map.\n";
     }
 }
+
+
+
+
 
 
 
@@ -62,39 +67,99 @@ void LiveInput::startLiveInput()
     std::string input;
     std::string currentWord;
     char c;
+    int searchType=0;
     while (true)
     {
         c = getChar();
-        input.append(1, c);
+        if (isalpha(c) || c==SPACE)
+        {
+            input.append(1, c);
+        }
+        
+        
         if (c == ENTER_KEY || c == CARRIAGE_RETURN || c == ESCAPE)
             break;
-        else if (c == BACKSPACE || c == DELETE)
+        if (c == BACKSPACE || c == DELETE)
         {
-            // not implemented yet
+            input.pop_back();
         }
-        if (c == TAB)
+        if (c==BACKSLASH)
         {
-            chooseSuggestedWord(input);
+            chooseSuggestedWord(input,searchType);
             continue;
         }
+        
         if (c == SPACE)
         {
             currentWord = sanitizeWord(input);
             updateWordFrequency(currentWord);
             currentWord.clear();
         }
+        if (c=='0')
+        {
+            searchType=0;
+        }
+        if (c=='!')
+        {
+            searchType=1;
+        }
+        if (c=='@')
+        {
+            searchType=2;
+        }
+
+        std::vector<std::string> words = getMatchingWords(input, searchType);
+        
+        // replaceWithSuggestion(words,input,c);
+        int wordChoiceNum;
+        if (c=='1' ||c=='2' ||c=='3' ||c=='4' ||c=='5' ||c=='6' ||c=='7' ||c=='8' ||c=='9')
+        {
+            wordChoiceNum = int(c-'0');
+        }else{
+            wordChoiceNum = 0;
+        }
+
+        
+        if (c==TAB || wordChoiceNum!=0)
+        {
+            char lastChar=input.back();
+            
+            while (lastChar!=SPACE && !input.empty())
+            {
+                lastChar=input.back();
+                input.pop_back();
+            }
+            if (!input.empty())
+            {
+                input+=' ';
+            }
+            
+            if (c==TAB)
+            {
+                input.append(words[0]);
+                input+=' ';
+            }
+            else
+            {
+                input.append(words[wordChoiceNum-1]);
+                input+=' ';
+            }
+        }
+        
+        
 
 #ifdef _WIN32
         system("cls");
 #else
         system("clear");
 #endif
-        std::cout << "Enter Tab to choose suggested word! \n";
+        std::cout << "Enter Backslash to choose suggested word! \n";
         std::cout << input << '\n';
         std::cout << "\n============================\n";
         std::cout << "Suggested words: \n";
-        std::vector<std::string> words = getMatchingWords(input, 0);
-        for (int i = 0; i < words.size(); i++)
+        
+        
+        for (int i = 0; i < words.size() && i<9; i++)
         {
             displayWord(i,input,words[i]);
             if ((i + 1) % 5 == 0)
@@ -102,6 +167,21 @@ void LiveInput::startLiveInput()
                 std::cout << std::endl;
             }
         }
+        std::cout<<"\n\nOrder of suggestions: ";
+        if (searchType==0)
+        {
+            std::cout<<"Most frequently used\n";
+        }else if (searchType==1)
+        {
+            std::cout<<"Lexicographical\n";
+        }else if (searchType==2)
+        {
+            std::cout<<"Shortest first\n";
+        }
+
+        std::cout<<"\nTo change suggestion order enter: \n\033[34m0\033[0m for most frequently used\n\033[34m!\033[0m for lexicographical order\n\033[34m@\033[0m for shortest first";
+
+
     }
     setBufferedInput(true); // re-enable buffering before exiting
 }
@@ -214,10 +294,10 @@ int LiveInput::performOperation(std::string wordChoice, int opChoice)
     return -1; // return -1 if the operation is not valid
 }
 
-void LiveInput::chooseSuggestedWord(std::string input)
+void LiveInput::chooseSuggestedWord(std::string input,int searchType)
 {
     std::cout << "\n============================\n";
-    std::vector<std::string> words = getMatchingWords(input, 0);
+    std::vector<std::string> words = getMatchingWords(input, searchType);
 
     std::cout << "Choose a word by entering its number : ";
     int choice = 0;
