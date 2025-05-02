@@ -14,8 +14,9 @@
 #include <unistd.h>
 #endif
 //Belal
-//delete from map along with the trie[]
-//insert(hat7ott el word in the trie+in the map with freq=3 if it doesn't exist)[]
+//delete from map along with the trie[done]
+//insert(hat7ott el word in the trie+in the map with freq=3 if it doesn't exist)[done]
+// live input works good while fetched data have some problems with some words !!! under testing
 
 
 //ramy
@@ -38,11 +39,6 @@ LiveInput::LiveInput(Trie &tr, std::unordered_map<std::string, int> *frequency) 
 }
 
 
-
-
-
-
-
 /// @brief highligts exact matching word suggestions
 /// @param input string complete input string
 /// @param word string word being displayed
@@ -63,6 +59,11 @@ void LiveInput::displayWord(int index,std::string input,std::string word){
 /// not tested yet, and no suggestion can be choosen!
 void LiveInput::startLiveInput()
 {
+    //debugging purpose
+    for(auto& [word, fre] : (*freq)) {
+        std::cout<<word<<" "<<fre<<'\n';
+    }
+    system("pause");
     setBufferedInput(false); // disable buffering on Linux/Mac
     std::string input;
     std::string currentWord;
@@ -81,7 +82,8 @@ void LiveInput::startLiveInput()
             break;
         if (c == BACKSPACE || c == DELETE)
         {
-            input.pop_back();
+            if (!input.empty())
+                input.pop_back();
         }
         if (c==BACKSLASH)
         {
@@ -182,10 +184,16 @@ void LiveInput::startLiveInput()
             std::cout<<"Shortest first\n";
         }
 
-        std::cout<<"\nTo change suggestion order enter: \n\033[34m0\033[0m for most frequently used\n\033[34m!\033[0m for lexicographical order\n\033[34m@\033[0m for shortest first";
+        std::cout<<"\nTo change suggestion order enter: \n\033[34m0\033[0m for most frequently used\n\033[34m!\033[0m for lexicographical order\n\033[34m@\033[0m for shortest first\n";
 
 
     }
+    mytrie.displayTrie(); // Display the Trie after exiting the loop
+    //debugging purpose
+    for(auto& [word, fre] : (*freq)) {
+        std::cout<<word<<" "<<fre<<'\n';
+    }
+    system("pause");
     setBufferedInput(true); // re-enable buffering before exiting
 }
 void LiveInput::updateWordFrequency(std::string word)
@@ -286,22 +294,32 @@ int LiveInput::performOperation(std::string wordChoice, int opChoice)
 {
     if (opChoice == 1)
     {
-        mytrie.insertWord(wordChoice);
-        return 1;
+        return 2;
     }
     else if (opChoice == 2)
     {
         mytrie.deleteWord(wordChoice);
+        // reset frequency to zero.
+        auto it = freq->find(wordChoice);
+        if (it != freq->end())
+        {
+            (*freq)[wordChoice] = 0;
+        }
         return 1;
     }
     return -1; // return -1 if the operation is not valid
 }
 
-void LiveInput::chooseSuggestedWord(std::string input,int searchType)
+void LiveInput::chooseSuggestedWord(std::string& input,int searchType)
 {
     std::cout << "\n============================\n";
     std::vector<std::string> words = getMatchingWords(input, searchType);
-
+    // if no suggestions available get back.
+    if (words.empty())
+    {
+        std::cout << "No suggestions available.\n";
+        return;
+    }
     std::cout << "Choose a word by entering its number : ";
     int choice = 0;
     while (true)
@@ -321,7 +339,7 @@ void LiveInput::chooseSuggestedWord(std::string input,int searchType)
         }
         std::cout << "Invalid input. Please enter a number: ";
     }
-    std::cout << "Choose operation: \n[1] Insert\n[2] Delete\n[3] Cancel\n";
+    std::cout << "Choose operation: \n[1] Complete\n[2] Delete\n[3] Cancel\n";
     int opChoice = 0;
     while (true)
     {
@@ -335,13 +353,30 @@ void LiveInput::chooseSuggestedWord(std::string input,int searchType)
         }
         if (opChoice == 1 || opChoice == 2 || opChoice == 3)
             break;
-        std::cout << "Invalid choice. Please enter 1 for Insert, 2 for Delete, or 3 to Cancel: ";
+        std::cout << "Invalid choice. Please enter 1 for Complete, 2 for Delete, or 3 to Cancel: ";
     }
     if (opChoice == 3)
     {
         std::cout << "Operation cancelled.\n";
         return;
     }
-    std::cout << ((performOperation(words[choice - 1], opChoice) == 1) ? "Operation successful!" : "Operation failed!");
+    int opResult = performOperation(words[choice - 1], opChoice);
+    if (opResult == 1){
+        std::cout << "Operation successful!\n";
+    }
+    else if (opResult == 2)
+    {
+        size_t lastWord = getLastWord(input).length();
+        while (lastWord--)
+        {
+            input.pop_back();
+        }
+        input.append(words[choice - 1]);
+        return;
+    }
+    else if (opResult == -1)
+    {
+        std::cout << "Operation failed!\n";
+    }
     std::cout << "\n============================\n";
 }

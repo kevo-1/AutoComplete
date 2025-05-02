@@ -33,7 +33,7 @@ private:
     no special characters*/
     std::string getLastWord(std::string input);
     std::string sanitizeWord(std::string input);
-    void chooseSuggestedWord(std::string input,int searchType);
+    void chooseSuggestedWord(std::string& input,int searchType);
     void displayWord(int index,std::string input,std::string word);
 
 public:
