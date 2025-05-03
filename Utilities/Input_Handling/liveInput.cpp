@@ -19,9 +19,6 @@
 // live input works good while fetched data have some problems with some words !!! under testing
 
 
-//ramy
-//backspace[done]
-//complete the rest of the suggested word[done]
 
 
 /// @brief Constructor for LiveInput class
@@ -52,6 +49,10 @@ void LiveInput::displayWord(int index,std::string input,std::string word){
                 std::cout << "[" << index + 1 << "] " << word << "  ";
             }
 }
+
+
+
+
 
 
 
@@ -98,19 +99,19 @@ void LiveInput::startLiveInput()
             currentWord.clear();
         }
 
-        //choosing order type(searchType)
+        
         if (c=='0')
-        {
-            searchType=0;
-        }
-        if (c=='!')
-        {
-            searchType=1;
-        }
-        if (c=='@')
-        {
-            searchType=2;
-        }
+            {
+                searchType=0;
+            }
+            if (c=='!')
+            {
+                searchType=1;
+            }
+            if (c=='@')
+            {
+                searchType=2;
+            }
 
         //moved this here in order to use it in completing using suggestions
         std::vector<std::string> words = getMatchingWords(input, searchType);

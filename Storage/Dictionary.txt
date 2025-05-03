@@ -1,13 +1,13 @@
-program 12
+program 0
 hello 36
-progress 85
+progress 0
 project 3
 projec 1
 promotion 0
 prototype 30
 priority 17
 prediction 5
-proceed 40
+proceed 41
 what 0
 'ninja' 10
 'chicken' 82
