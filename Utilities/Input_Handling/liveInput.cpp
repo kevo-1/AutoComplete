@@ -100,18 +100,18 @@ void LiveInput::startLiveInput()
         }
 
         
-        if (c=='0')
-            {
-                searchType=0;
-            }
-            if (c=='!')
-            {
-                searchType=1;
-            }
-            if (c=='@')
-            {
-                searchType=2;
-            }
+       if (c=='~')
+       {
+           searchType=0;
+       }
+        if (c=='!')
+        {
+            searchType=1;
+        }
+        if (c=='@')
+        {
+            searchType=2;
+        }
 
         //moved this here in order to use it in completing using suggestions
         std::vector<std::string> words = getMatchingWords(input, searchType);
@@ -185,7 +185,7 @@ void LiveInput::startLiveInput()
             std::cout<<"Shortest first\n";
         }
 
-        std::cout<<"\nTo change suggestion order enter: \n\033[34m0\033[0m for most frequently used\n\033[34m!\033[0m for lexicographical order\n\033[34m@\033[0m for shortest first\n";
+        std::cout<<"\nTo change suggestion order enter: \n\033[34m~\033[0m for most frequently used\n\033[34m!\033[0m for lexicographical order\n\033[34m@\033[0m for shortest first\n";
 
 
     }
