@@ -5,6 +5,7 @@
 #include "liveInput.h"
 #include <vector>
 #include <string>
+#include <stack>
 #include<cctype>
 #include "../Data_Structures/Trie.h"
 #ifdef _WIN32
@@ -36,6 +37,35 @@ LiveInput::LiveInput(Trie &tr, std::unordered_map<std::string, int> *frequency) 
 }
 
 
+/// @brief provides greyed out text to seen for complete
+/// @param words suggested words
+/// @param input input str
+/// @return non typed part of the first suggestion
+std::string LiveInput::completeGreyedOut(std::vector<std::string>words,std::string input){
+    std::string completion;
+    // std::stack<char> prefStack;
+    if(!words.empty() && !input.empty()){
+        std::stack<char> suggStack;
+        std::string pref =sanitizeWord(input);
+        std::string sugg=words[0];
+        for (int i = sugg.size()-1; i >=0; i--)
+        {
+            suggStack.push(sugg[i]);
+        }
+        for (int i = 0; i < pref.size(); i++)
+        {
+            suggStack.pop();
+        }
+        while (!suggStack.empty())
+        {
+            completion+=suggStack.top();
+            suggStack.pop();
+        }
+        
+    }
+    return completion;
+}
+
 /// @brief highligts exact matching word suggestions
 /// @param input string complete input string
 /// @param word string word being displayed
@@ -50,10 +80,102 @@ void LiveInput::displayWord(int index,std::string input,std::string word){
             }
 }
 
+/// @brief replaces current prefix being typed with the chosen suggestion
+/// @param words suggested words
+/// @param input input string
+/// @param c input character for choosing suggestion
+void LiveInput:: replaceWithSuggestion(std::vector<std::string> words,std::string& input,char c){
+    int wordChoiceNum;
+        if (c=='1' ||c=='2' ||c=='3' ||c=='4' ||c=='5' ||c=='6' ||c=='7' ||c=='8' ||c=='9')
+        {
+            wordChoiceNum = int(c-'0');
+        }else{
+            wordChoiceNum = 0;
+        }
+
+        
+        if (c==TAB || wordChoiceNum!=0)
+        {
+            char lastChar=input.back();
+            
+            while (lastChar!=SPACE && !input.empty())
+            {
+                lastChar=input.back();
+                input.pop_back();
+            }
+            if (!input.empty())
+            {
+                input+=' ';
+            }
+            
+            if (c==TAB)
+            {
+                input.append(words[0]);
+                input+=' ';
+            }
+            else
+            {
+                input.append(words[wordChoiceNum-1]);
+                input+=' ';
+            }
+        }
+}
+
+/// @brief allows user to dynamically change order of suggestions
+/// @param c 
+/// @return search type: 0(most frequent), 1(lexicographical), 2(shortest first)
+void LiveInput::chooseSearchType(char c,int& searchType){
+    if (c=='~')
+       {
+           searchType = 0;
+       }
+    if (c=='!')
+        {
+            searchType = 1;
+        }
+    if (c=='@')
+        {
+            searchType = 2;
+        }
+}
 
 
+void LiveInput::mainDisplay(std::vector<std::string>words,std::string input, int searchType){
+    
+#ifdef _WIN32
+system("cls");
+#else
+system("clear");
+#endif
+std::cout << "Enter Backslash to choose suggested word! \n";
+std::cout << input <<"\033[2m"<<completeGreyedOut(words, input)<<"\033[0m\n";
+std::cout << "\n============================\n";
+std::cout << "Suggested words: \n";
 
+//added upper bound: 9 bec i only have numbers 1-9 to chose from in completion
+for (int i = 0; i < words.size() && i<9; i++)
+{
+    displayWord(i,input,words[i]);
+    if ((i + 1) % 5 == 0)
+    {
+        std::cout << std::endl;
+    }
+}
+std::cout<<"\n\nOrder of suggestions: ";
+if (searchType==0)
+{
+    std::cout<<"Most frequently used\n";
+}else if (searchType==1)
+{
+    std::cout<<"Lexicographical\n";
+}else if (searchType==2)
+{
+    std::cout<<"Shortest first\n";
+}
 
+std::cout<<"\nTo change suggestion order enter: \n\033[34m~\033[0m for most frequently used\n\033[34m!\033[0m for lexicographical order\n\033[34m@\033[0m for shortest first\n";
+
+}
 
 
 /// @brief Starts flow of live input for (terminal) and suggest words
@@ -100,92 +222,16 @@ void LiveInput::startLiveInput()
         }
 
         
-       if (c=='~')
-       {
-           searchType=0;
-       }
-        if (c=='!')
-        {
-            searchType=1;
-        }
-        if (c=='@')
-        {
-            searchType=2;
-        }
+        chooseSearchType(c,searchType);
 
         //moved this here in order to use it in completing using suggestions
         std::vector<std::string> words = getMatchingWords(input, searchType);
         
-        // replaceWithSuggestion(words,input,c);
-        int wordChoiceNum;
-        if (c=='1' ||c=='2' ||c=='3' ||c=='4' ||c=='5' ||c=='6' ||c=='7' ||c=='8' ||c=='9')
-        {
-            wordChoiceNum = int(c-'0');
-        }else{
-            wordChoiceNum = 0;
-        }
-
         
-        if (c==TAB || wordChoiceNum!=0)
-        {
-            char lastChar=input.back();
-            
-            while (lastChar!=SPACE && !input.empty())
-            {
-                lastChar=input.back();
-                input.pop_back();
-            }
-            if (!input.empty())
-            {
-                input+=' ';
-            }
-            
-            if (c==TAB)
-            {
-                input.append(words[0]);
-                input+=' ';
-            }
-            else
-            {
-                input.append(words[wordChoiceNum-1]);
-                input+=' ';
-            }
-        }
+        replaceWithSuggestion(words,input,c);
         
+        mainDisplay(words,input,searchType);
         
-
-#ifdef _WIN32
-        system("cls");
-#else
-        system("clear");
-#endif
-        std::cout << "Enter Backslash to choose suggested word! \n";
-        std::cout << input << '\n';
-        std::cout << "\n============================\n";
-        std::cout << "Suggested words: \n";
-        
-        //added upper bound: 9 bec i only have numbers 1-9 to chose from in completion
-        for (int i = 0; i < words.size() && i<9; i++)
-        {
-            displayWord(i,input,words[i]);
-            if ((i + 1) % 5 == 0)
-            {
-                std::cout << std::endl;
-            }
-        }
-        std::cout<<"\n\nOrder of suggestions: ";
-        if (searchType==0)
-        {
-            std::cout<<"Most frequently used\n";
-        }else if (searchType==1)
-        {
-            std::cout<<"Lexicographical\n";
-        }else if (searchType==2)
-        {
-            std::cout<<"Shortest first\n";
-        }
-
-        std::cout<<"\nTo change suggestion order enter: \n\033[34m~\033[0m for most frequently used\n\033[34m!\033[0m for lexicographical order\n\033[34m@\033[0m for shortest first\n";
 
 
     }
