@@ -146,25 +146,12 @@ void Trie::__BFSsearch(std::vector<std::string>& words, std::string currentWord,
     }
 }
 
-/**
- * @brief DFS Traversing to get the words with the same prefix passed
- *  
- * A Function that traverses all over the possible words and returns them ordered lexicographically
- * 
- * @param words_vector a vector that contains the results of the search
- * @param current_word the current word/prefix
- * @param root the inital node of the trie
- * @param depth the level of the tree the funciton is at
- * 
- * @author Mario
- * 
- */
 void Trie::__DFSsearch(std::vector<std::string>& words, std::string currentWord, Node *root,int depth = 0){
     if(!root){//if the root (the current node) is null then we return because the trie doesn't exist
         return;
-    }
+    }//pro(cess)
     //if the root is an end of a word then we add the current word to the vector even if it is the same as the prefix given
-    if(depth == currentWord.length()){
+    if(!(depth < currentWord.length())){
     if(root->endWord){
         words.push_back(currentWord);
     }
@@ -195,13 +182,10 @@ void Trie::__DFSsearch(std::vector<std::string>& words, std::string currentWord,
                     return ;
                 }
                 root = root->children[index];
-                depth++;
             }
-            return __DFSsearch(words, currentWord, root,depth);
+            return __DFSsearch(words, currentWord, root,depth + 1);
         }
 }
-
-
 /**
  * @brief get the words with the same prefix passed ordered by frequency of us
  *  
