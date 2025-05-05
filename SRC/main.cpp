@@ -30,9 +30,11 @@ int main() {
     freq["'ninja'"] = 10;
     freq["'chicken'"] = 92;
     df.SaveFrequency(freq);
-    // temp = tr.getWords("pro", 2);
-    // tr.displayTrie();
-    // for(auto c: temp) {
-    //     std::cout<<c<<std::endl;
-    // }
+    std::vector<std::string> temp = tr.getWords("pro",freq,1);
+   tr.displayTrie();
+//    std::cout<<"============================================\n";
+    for(auto c: temp) {
+        std::cout<<c<<std::endl;
+    }
+    // std::cout<<"end";
 }
