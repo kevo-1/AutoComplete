@@ -25,8 +25,10 @@ private:
     void setBufferedInput(bool enable);
     char getChar(void);
     void updateWordFrequency(std::string word);
-    // int  isOneThroughNine(char c);
-    // void replaceWithSuggestion(std::vector<std::string> words,std::string input,char c);
+    void replaceWithSuggestion(std::vector<std::string> words,std::string &input,char c);
+    std::string completeGreyedOut(std::vector<std::string>words,std::string input);
+    void chooseSearchType(char c,int &searchType);
+    void mainDisplay(std::vector<std::string>words,std::string input, int searchType);
 
     /*done input manipulation functions.. takes a whole string in
     getMatchWords -> getLastWord -> sanitize gives back a word in lowercase english.
