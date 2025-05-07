@@ -4,6 +4,8 @@
 #include <vector>
 #include<string>
 #include<unordered_map>
+#include "../GUI/mainwindow.h"
+#include <QApplication>
 
 int main(int argc, char *argv[]) {
 
@@ -37,4 +39,9 @@ int main(int argc, char *argv[]) {
     for(auto c: temp) {
         std::cout<<c<<std::endl;
     }
+
+    QApplication app(argc, argv);
+    MainWindow main_window;
+    main_window.show();
+    return app.exec();
 }
