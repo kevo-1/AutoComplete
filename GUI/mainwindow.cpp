@@ -30,16 +30,16 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::onAddWord()
-{
+void MainWindow::onAddWord() {
+    QString word = ui->lineEdit->text();
+    std::string wordStr = word.toStdString();
 }
 
-void MainWindow::onRemoveWord()
-{
-
+void MainWindow::onRemoveWord() {
 }
 
 void MainWindow::onFileUpload(){
+
 }
 
 void MainWindow::onSaveFile()
