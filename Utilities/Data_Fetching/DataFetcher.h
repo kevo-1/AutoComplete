@@ -12,7 +12,7 @@
  *  
  * A Class to handle loading the dictionary of previously used words and save them when done
  *
- * @author Peter & Kevin
+ * @author Peter
  */
 class DataFetcher {
 private:
@@ -28,7 +28,7 @@ public:
 
     // Methods to load and save frequency data
     std::unordered_map<std::string, int> LoadFrequency();
-    void SaveFrequency(std::unordered_map<std::string, int> data);
+    void SaveFrequency(std::unordered_map<std::string, int>& data);
 };
 
 #endif  // DATAFETCHER_H

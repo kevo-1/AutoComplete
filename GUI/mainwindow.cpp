@@ -32,7 +32,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::onAddWord() {
     QString word = ui->lineEdit->text();
-    std::string wordStr = word.toStdString();
+    ui->listWidget->addItem(word);
+    ui->lineEdit->clear();
 }
 
 void MainWindow::onRemoveWord() {
