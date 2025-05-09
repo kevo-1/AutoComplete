@@ -81,6 +81,8 @@ add_executable(AutoComplete
         SRC/main.cpp
         Utilities/Data_Structures/Trie.cpp
         Utilities/Data_Fetching/DataFetcher.cpp
+        Utilities/Input_Handling/liveInput.cpp
+        SRC/BFF/BFF.cpp
         GUI/mainwindow.cpp
         GUI/mainwindow.ui
 )
