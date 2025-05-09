@@ -1,0 +1,33 @@
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
+#include <QMainWindow>
+
+QT_BEGIN_NAMESPACE
+namespace Ui { class MainWindow; }
+QT_END_NAMESPACE
+
+class MainWindow : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    MainWindow(QWidget *parent = nullptr);
+    ~MainWindow();
+
+private slots:
+    void onAddWord();
+    void onRemoveWord();
+    void onFileUpload();
+    void onSaveFile();
+    void onSortAlphabetical();
+    void onSortByLength();
+    void onSortByFrequency();
+
+private:
+    Ui::MainWindow *ui;
+    void updateListDisplay();
+    QMap<QString, int> wordFrequency;
+};
+
+#endif // MAINWINDOW_H

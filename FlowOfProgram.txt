@@ -1,0 +1,6 @@
+1) input is given as a line by line string
+2) the string is passed to a liveinput parser
+3) the liveinput pasrser passes the current word/prefix to the Search Func in Trie
+4) The Trie searches for the word/prefix by either DFS/BFS or Frequency of the word
+5) the vector of results is then passed back to the liveinput parser
+6) If the word selected is written more than 3 times the word is added to the Trie

@@ -1,13 +1,10 @@
-do this at AutoComplete\:
+# Running Code
+
 mkdir Build
-cd Build 
+cd Build
 cmake .. -DCMAKE_BUILD_TYPE=Debug
+mingw32-make
+
+#or
+
 cmake --build . --verbose
-
-AutoComplete.exe
-
-
-to rebuild this locating at bin\Debug:
-cd ..\..
-rmdir /s /q Build
-rmdir /s /q bin

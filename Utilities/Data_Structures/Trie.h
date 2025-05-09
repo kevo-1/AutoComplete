@@ -26,7 +26,7 @@ public:
     bool startsWith(std::string pre);
     void deleteWord(std::string word);
     void displayTrie();
-    std::vector<std::string> getWords(std::string word,std::unordered_map<std::string, int>& frequency, int choice);
+    std::vector<std::string> getWords(std::string word,std::unordered_map<std::string, int> frequency, int choice);
     
     private:
     void __displayTrieHelper(std::string pre, Node* node);
