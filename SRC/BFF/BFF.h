@@ -5,7 +5,7 @@
 /**
  * * @class BFF (Backend-for-frontend)
  * @brief The logic of the AutoComplete meets here
- * A Class to handle connection between database and the front end and the words
+ * A Class to handle connection between database and the front end and the words processes
  * @author Belal & Peter & Kevin
  */
 
@@ -17,7 +17,6 @@ public:
 
     int addWord(std::string);
     int removeWord(std::string);
-private:
     BFF(DataFetcher &df);
     ~BFF();
 };

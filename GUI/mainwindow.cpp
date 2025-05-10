@@ -7,9 +7,10 @@
 #include <QMessageBox>
 #include <algorithm>
 
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(QWidget *parent, DataFetcher& df)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , service(df)
 {
     ui->setupUi(this);
 
@@ -32,8 +33,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::onAddWord() {
     QString word = ui->lineEdit->text();
-    ui->listWidget->addItem(word);
-    ui->lineEdit->clear();
+    this->service.addWord(word.toStdString());
 }
 
 void MainWindow::onRemoveWord() {
@@ -43,12 +43,11 @@ void MainWindow::onFileUpload(){
 
 }
 
-void MainWindow::onSaveFile()
-{
+void MainWindow::onSaveFile() {
+
 }
 
-void MainWindow::onSortAlphabetical()
-{
+void MainWindow::onSortAlphabetical() {
 
 }
 
@@ -62,7 +61,6 @@ void MainWindow::onSortByFrequency()
 
 }
 
-void MainWindow::updateListDisplay()
-{
+void MainWindow::updateListDisplay() {
 
 }

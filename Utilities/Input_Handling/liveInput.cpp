@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <stack>
+#include <limits>
 #include<cctype>
 #include "../Data_Structures/Trie.h"
 #ifdef _WIN32
