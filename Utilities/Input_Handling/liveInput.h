@@ -45,6 +45,6 @@ public:
     void startLiveInput();
     /*done: choice 1 insert data in the tree from suggested text choice 2 delete word*/
     std::vector<std::string> getMatchingWords(std::string input, int searchType);
-    int performOperation(std::string wordChoice, int opChoice);
+    int performOperation(std::string wordChoice);
 };
 #endif

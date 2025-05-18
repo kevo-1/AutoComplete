@@ -15,9 +15,10 @@
 #include <termios.h>
 #include <unistd.h>
 #endif
+
 //Belal
 //delete from map along with the trie[done]
-//insert(hat7ott el word in the trie+in the map with freq=3 if it doesn't exist)[done]
+//insert(hat7ott el word in the trie+in the map with freq=3 if it doesn't exist)[done] //
 // live input works good while fetched data have some problems with some words !!! under testing
 
 
@@ -185,9 +186,9 @@ std::cout<<"\nTo change suggestion order enter: \n\033[34m~\033[0m for most freq
 void LiveInput::startLiveInput()
 {
     //debugging purpose
-    for(auto& [word, fre] : (*freq)) {
-        std::cout<<word<<" "<<fre<<'\n';
-    }
+    // for(auto& [word, fre] : (*freq)) {
+    //     std::cout<<word<<" "<<fre<<'\n';
+    // }
     system("pause");
     setBufferedInput(false); // disable buffering on Linux/Mac
     std::string input;
@@ -210,12 +211,35 @@ void LiveInput::startLiveInput()
             if (!input.empty())
                 input.pop_back();
         }
-        if (c==BACKSLASH)
+        if (c == BACKSLASH)
         {
-            chooseSuggestedWord(input,searchType);
+            std::cout << "choose operation: \n[1] Insert\n[2] Delete\n";
+            int choice = -1;
+            while (true)
+            {
+                std::cin >> choice;
+                if (std::cin.fail())
+                {
+                    std::cin.clear();                                                   // Clear the error flag
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
+                    std::cout << "Invalid input. Please enter a number: ";
+                    continue;
+                }
+                if (choice == 1 || choice == 2)
+                    break;
+                std::cout << "Invalid choice. Please enter 1 for Insert, 2 for Delete: ";
+            }
+            if(choice==1){
+                std::string wordChoice = sanitizeWord(input);
+                mytrie.insertWord(wordChoice);
+                (*freq)[wordChoice] = 3;
+                std::cout << "Word inserted successfully!\n";
+            }else if (choice==2){
+                chooseSuggestedWord(input, 1);
+            }
             continue;
         }
-        
+
         if (c == SPACE)
         {
             currentWord = sanitizeWord(input);
@@ -339,25 +363,33 @@ std::vector<std::string> LiveInput::getMatchingWords(std::string input, int sear
 /// @param opChoice operation choice (0: insert, 1: delete)
 /// @return answer of the operation (1: success, -1: failure)
 /// @author Belal
-int LiveInput::performOperation(std::string wordChoice, int opChoice)
-{
-    if (opChoice == 1)
-    {
-        return 2;
-    }
-    else if (opChoice == 2)
-    {
-        mytrie.deleteWord(wordChoice);
-        // reset frequency to zero.
-        auto it = freq->find(wordChoice);
-        if (it != freq->end())
-        {
-            (*freq)[wordChoice] = 0;
-        }
-        return 1;
-    }
-    return -1; // return -1 if the operation is not valid
-}
+// int LiveInput::performOperation(std::string wordChoice)
+// {
+//     std::cout << "choose operation: \n[1] Insert\n[2] Delete\n";
+//     int choice = -1;
+//     while (true)
+//     {
+//         std::cin >> choice;
+//         if (std::cin.fail())
+//         {
+//             std::cin.clear();                                                   // Clear the error flag
+//             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
+//             std::cout << "Invalid input. Please enter a number: ";
+//             continue;
+//         }
+//         if (choice == 1 || choice == 2)
+//             break;
+//         std::cout << "Invalid choice. Please enter 1 for Insert, 2 for Delete: ";
+//     }
+//     if (choice == 1)
+//     {
+//         mytrie.insertWord(wordChoice);
+//         (*freq)[wordChoice] = 3;
+//         std::cout << "Word inserted successfully!\n";
+//         return 1;
+//     }
+//     return -1; // return -1 if the operation is not valid
+// }
 
 void LiveInput::chooseSuggestedWord(std::string& input,int searchType)
 {
@@ -388,7 +420,7 @@ void LiveInput::chooseSuggestedWord(std::string& input,int searchType)
         }
         std::cout << "Invalid input. Please enter a number: ";
     }
-    std::cout << "Choose operation: \n[1] Complete\n[2] Delete\n[3] Cancel\n";
+    std::cout << "Choose operation: \n[1] Delete\n[2] go back\n";
     int opChoice = 0;
     while (true)
     {
@@ -397,35 +429,45 @@ void LiveInput::chooseSuggestedWord(std::string& input,int searchType)
         {
             std::cin.clear();                                                   // Clear the error flag
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
-            std::cout << "Invalid input. Please enter a number (1, 2, or 3): ";
+            std::cout << "Invalid input. Please enter a number (1 or 2): ";
             continue;
         }
-        if (opChoice == 1 || opChoice == 2 || opChoice == 3)
+        if (opChoice == 1 || opChoice == 2 )
             break;
-        std::cout << "Invalid choice. Please enter 1 for Complete, 2 for Delete, or 3 to Cancel: ";
+        std::cout << "Invalid choice. Please enter 1 for Delete, 2 for go back: ";
     }
-    if (opChoice == 3)
+    if (opChoice == 1)
+    {
+        std::cout << "You chose to delete: " << words[choice - 1] << "\n";
+        mytrie.deleteWord(words[choice - 1]);
+        auto it = freq->find(words[choice - 1]);
+        if (it != freq->end())
+        {
+            (*freq)[words[choice - 1]] = 0;
+        }
+        std::cout << "Word deleted successfully!\n";
+    }
+    else if (opChoice == 2)
     {
         std::cout << "Operation cancelled.\n";
         return;
     }
-    int opResult = performOperation(words[choice - 1], opChoice);
-    if (opResult == 1){
-        std::cout << "Operation successful!\n";
-    }
-    else if (opResult == 2)
-    {
-        size_t lastWord = getLastWord(input).length();
-        while (lastWord--)
-        {
-            input.pop_back();
-        }
-        input.append(words[choice - 1]);
-        return;
-    }
-    else if (opResult == -1)
-    {
-        std::cout << "Operation failed!\n";
-    }
+    // if (opResult == 1){
+    //     std::cout << "Operation successful!\n";
+    // }
+    // else if (opResult == 2)
+    // {
+    //     size_t lastWord = getLastWord(input).length();
+    //     while (lastWord--)
+    //     {
+    //         input.pop_back();
+    //     }
+    //     input.append(words[choice - 1]);
+    //     return;
+    // }
+    // else if (opResult == -1)
+    // {
+    //     std::cout << "Operation failed!\n";
+    // }
     std::cout << "\n============================\n";
 }
