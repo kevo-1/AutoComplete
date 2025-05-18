@@ -1,11 +1,11 @@
 #include "../Utilities/Data_Structures/Trie.h"
 #include "../Utilities/Data_Fetching/DataFetcher.h"
+#include "../Utilities/Input_Handling/liveInput.h"
 #include <iostream>
 #include <vector>
-#include<string>
-#include<unordered_map>
-#include "../GUI/mainwindow.h"
-#include <QApplication>
+#include <string>
+#include <unordered_map>
+// #include "../GUI/mainwindow.h"
 
 int main(int argc, char *argv[]) {
 
@@ -26,22 +26,30 @@ int main(int argc, char *argv[]) {
     tr.insertWord("ninja");
 
     std::unordered_map<std::string, int> freq;
-    // freq = df.LoadFrequency();
-    // for(auto& [word, fre] : freq) {
-    //     std::cout<<word<<" "<<fre<<'\n';
-    // }
-    // freq["'ninja'"] = 10;
-    // freq["'chicken'"] = 92;
-    // df.SaveFrequency(freq);
+    freq = df.LoadFrequency();
+    for(auto& [word, fre] : freq) {
+        std::cout<<word<<" "<<fre<<'\n';
+    }
+    df.SaveFrequency(freq);
 
     std::vector<std::string> temp = tr.getWords("pro", freq, 2);
     tr.displayTrie();
     for(auto c: temp) {
         std::cout<<c<<std::endl;
     }
+    LiveInput li = LiveInput(tr ,&freq);
+    li.startLiveInput();
 
-    QApplication app(argc, argv);
-    MainWindow main_window;
-    main_window.show();
-    return app.exec();
+    // for debugging purposes
+    tr.displayTrie();
+    for(auto c: temp) {
+        std::cout<<c<<std::endl;
+    }
+    for(auto& [word, fre] : freq) {
+        std::cout<<word<<" "<<fre<<'\n';
+    }
+    // QApplication app(argc, argv);
+    // MainWindow main_window;
+    // main_window.show();
+    // return app.exec();
 }

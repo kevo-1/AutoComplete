@@ -7,6 +7,7 @@
 #include <string>
 #include <stack>
 #include<cctype>
+#include <limits>
 #include "../Data_Structures/Trie.h"
 #ifdef _WIN32
 #include <conio.h>
@@ -41,6 +42,7 @@ LiveInput::LiveInput(Trie &tr, std::unordered_map<std::string, int> *frequency) 
 /// @param words suggested words
 /// @param input input str
 /// @return non typed part of the first suggestion
+/// @author ramy
 std::string LiveInput::completeGreyedOut(std::vector<std::string>words,std::string input){
     std::string completion;
     // std::stack<char> prefStack;
