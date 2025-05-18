@@ -11,10 +11,12 @@ BFF::BFF(DataFetcher& df) {
 BFF::~BFF(){}
 
 void BFF::addWord(std::string word) {
+    std::cout<<"I am here";
     if(!this->trie.searchWord(word)) {
         this->trie.insertWord(word);
     }
     this->freq[word]++;
+    std::cout<<"I am here";
 }
 
 void BFF::removeWord(std::string word) {
