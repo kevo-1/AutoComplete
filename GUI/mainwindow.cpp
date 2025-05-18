@@ -6,14 +6,15 @@
 #include <QTextStream>
 #include <QMessageBox>
 #include <algorithm>
+#include <string>
 
-MainWindow::MainWindow(QWidget *parent, DataFetcher& df)
+MainWindow::MainWindow(DataFetcher& df, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , service(df)
 {
     ui->setupUi(this);
-
+    service.trie.displayTrie();
     // Connect buttons
     connect(ui->pushButton_4, &QPushButton::clicked, this, &MainWindow::onAddWord);
     connect(ui->pushButton_3, &QPushButton::clicked, this, &MainWindow::onRemoveWord);
@@ -33,10 +34,30 @@ MainWindow::~MainWindow()
 
 void MainWindow::onAddWord() {
     QString word = ui->lineEdit->text();
-    this->service.addWord(word.toStdString());
+
+    // QMessageBox warning;
+    // warning.setWindowTitle("Warning");
+    // warning.setStandardButtons(QMessageBox::Ok);
+    // warning.setIcon(QMessageBox::Warning);
+
+    // if(word.isEmpty()) {
+    //     warning.setText("Can't add an empty word :)");
+    //     warning.exec();
+    // } else {
+        
+    // }
+    std::string wordString = word.toStdString();
+    service.addWord(wordString);
 }
 
 void MainWindow::onRemoveWord() {
+    QMessageBox warning;
+    warning.setWindowTitle("Warning");
+    warning.setStandardButtons(QMessageBox::Ok);
+    warning.setIcon(QMessageBox::Warning);
+    warning.setText("Can't add an empty word :)");
+    warning.exec();
+    this->service.removeWord(ui->lineEdit->text().toStdString());
 }
 
 void MainWindow::onFileUpload(){

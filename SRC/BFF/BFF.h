@@ -1,3 +1,4 @@
+#pragma once
 #include "../../Utilities/Data_Fetching/DataFetcher.h"
 #include "../../Utilities/Data_Structures/Trie.h"
 #include <unordered_map>
@@ -15,8 +16,8 @@ public:
     Trie trie;
     std::unordered_map<std::string, int> freq;
 
-    int addWord(std::string);
-    int removeWord(std::string);
+    void addWord(std::string);
+    void removeWord(std::string);
     BFF(DataFetcher &df);
     ~BFF();
 };

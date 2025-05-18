@@ -14,7 +14,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr, DataFetcher& df);
+    MainWindow(DataFetcher& df, QWidget *parent = nullptr);
     ~MainWindow();
     BFF service;
 private slots:
