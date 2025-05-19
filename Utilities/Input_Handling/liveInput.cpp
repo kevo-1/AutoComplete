@@ -212,7 +212,11 @@ void LiveInput::startLiveInput()
             input.append(1, c);
         }
         
+        chooseSearchType(c,searchType);
         std::vector<std::string> words = getMatchingWords(input, searchType);
+
+        
+
         if (c == ENTER_KEY || c == CARRIAGE_RETURN || c == ESCAPE)
             break;
         if (c == BACKSPACE || c == DELETE)
@@ -259,7 +263,6 @@ void LiveInput::startLiveInput()
         }
 
         
-        chooseSearchType(c,searchType);
 
         // //moved this here in order to use it in completing using suggestions
         // std::vector<std::string> words = getMatchingWords(input, searchType);
