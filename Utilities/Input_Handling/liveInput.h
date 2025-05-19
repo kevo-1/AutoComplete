@@ -37,7 +37,7 @@ private:
     std::string sanitizeWord(std::string input);
     void chooseSuggestedWord(std::string& input,int searchType,const std::vector<std::string>& words);
     void displayWord(int index,std::string input,std::string word);
-
+    void displayHeader(int searchType);
 public:
     Trie mytrie;
     std::unordered_map<std::string, int> * freq;

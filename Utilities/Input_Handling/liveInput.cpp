@@ -32,7 +32,7 @@
 /// @author Belal
 LiveInput::LiveInput(Trie &tr, std::unordered_map<std::string, int> *frequency) : mytrie{tr}, freq{frequency}
 {
-    tr.displayTrie();
+    //tr.displayTrie();
     if (freq->empty())
     {
         std::cout << "No words in the frequency map.\n";
@@ -141,9 +141,9 @@ void LiveInput:: replaceWithSuggestion(std::vector<std::string> words,std::strin
 /// @return search type: 0(most frequent), 1(lexicographical), 2(shortest first)
 void LiveInput::chooseSearchType(char c,int& searchType){
     if (c=='~')
-       {
-           searchType = 0;
-       }
+    {
+        searchType = 0;
+    }
     if (c=='!')
         {
             searchType = 1;
@@ -162,10 +162,10 @@ system("cls");
 #else
 system("clear");
 #endif
-std::cout << "Enter Backslash to choose operation(insert/delete)\n";
+displayHeader(searchType);
 std::cout << input <<"\033[2m"<<completeGreyedOut(words, input)<<"\033[0m\n";
-std::cout << "\n============================\n";
-std::cout << "Suggested words: \n";
+std::cout << "\n+ ----------------------------------------------------------------------------------------------------------- +\n";
+std::cout << "Suggested words: \n\n";
 
 //added upper bound: 9 bec i only have numbers 1-9 to chose from in completion
 for (int i = 0; i < words.size() && i<9; i++)
@@ -176,20 +176,18 @@ for (int i = 0; i < words.size() && i<9; i++)
         std::cout << std::endl;
     }
 }
-std::cout<<"\n\nOrder of suggestions: ";
-if (searchType==0)
-{
-    std::cout<<"Most frequently used\n";
-}else if (searchType==1)
-{
-    std::cout<<"Lexicographical\n";
-}else if (searchType==2)
-{
-    std::cout<<"Shortest first\n";
-}
-
-std::cout<<"\nTo change suggestion order enter: \n\033[34m~\033[0m for most frequently used\n\033[34m!\033[0m for lexicographical order\n\033[34m@\033[0m for shortest first\n";
-
+std::cout << "\n\n+ ----------------------------------------------------------------------------------------------------------- +\n";
+// std::cout<<"Order of suggestions: ";
+// if (searchType==0)
+// {
+//     std::cout<<"Most frequently used\n";
+// }else if (searchType==1)
+// {
+//     std::cout<<"Lexicographical\n";
+// }else if (searchType==2)
+// {
+//     std::cout<<"Shortest first\n";
+// }
 }
 
 
@@ -201,7 +199,6 @@ void LiveInput::startLiveInput()
     // for(auto& [word, fre] : (*freq)) {
     //     std::cout<<word<<" "<<fre<<'\n';
     // }
-    system("pause");
     setBufferedInput(false); // disable buffering on Linux/Mac
     std::string input;
     std::string currentWord;
@@ -225,8 +222,9 @@ void LiveInput::startLiveInput()
         }
         if (c == BACKSLASH)
         {
-            std::cout << "choose operation: \n[1] Insert\n[2] Delete\n";
+            std::cout << "choose operation: \n[1] Insert\n[2] Delete\n[3] exit\n";
             int choice = -1;
+            std::cout << "Enter your choice: ";
             while (true)
             {
                 std::cin >> choice;
@@ -237,9 +235,9 @@ void LiveInput::startLiveInput()
                     std::cout << "Invalid input. Please enter a number: ";
                     continue;
                 }
-                if (choice == 1 || choice == 2)
+                if (choice == 1 || choice == 2 || choice == 3)
                     break;
-                std::cout << "Invalid choice. Please enter 1 for Insert, 2 for Delete: ";
+                std::cout << "Invalid choice. Please enter 1 for Insert, 2 for Delete, 3 for exiting: ";
             }
             if(choice==1){
                 std::string wordChoice = sanitizeWord(input);
@@ -247,9 +245,10 @@ void LiveInput::startLiveInput()
                 (*freq)[wordChoice] = 3;
                 std::cout << "Word: "<<wordChoice<<" inserted successfully!\n";
             }else if (choice==2){
-                chooseSuggestedWord(input, 1, words);
+                chooseSuggestedWord(input, searchType, words);
+            }else if (choice==3){
+                continue;
             }
-            continue;
         }
 
         if (c == SPACE)
@@ -275,10 +274,10 @@ void LiveInput::startLiveInput()
     }
     mytrie.displayTrie(); // Display the Trie after exiting the loop
     //debugging purpose
-    for(auto& [word, fre] : (*freq)) {
-        std::cout<<word<<" "<<fre<<'\n';
-    }
-    system("pause");
+    // for(auto& [word, fre] : (*freq)) {
+    //     std::cout<<word<<" "<<fre<<'\n';
+    // }
+    //system("pause");
     setBufferedInput(true); // re-enable buffering before exiting
 }
 void LiveInput::updateWordFrequency(std::string word)
@@ -405,6 +404,7 @@ std::vector<std::string> LiveInput::getMatchingWords(std::string input, int sear
 
 void LiveInput::chooseSuggestedWord(std::string& input,int searchType,const std::vector<std::string>& words)
 {
+    int choice = 0;
     std::cout << "\n============================\n";
     // std::vector<std::string> words = getMatchingWords(input, searchType);
     // if no suggestions available get back.
@@ -413,41 +413,50 @@ void LiveInput::chooseSuggestedWord(std::string& input,int searchType,const std:
         std::cout << "No suggestions available.\n";
         return;
     }
-    std::cout << "Choose a word by entering its number : ";
-    int choice = 0;
+    else if (words.size() == 1)
+    {
+        std::cout << "Only one suggestion available: " << words[0] << "\n";
+        input = words[0];
+        choice = 1;
+    }
+    else
+    {
+        std::cout << "Choose a word by entering its number : ";
+        while (true)
+        {
+            std::cin >> choice;
+            if (std::cin.fail())
+            {
+                std::cin.clear();                                                   
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
+                std::cout << "Invalid input. Please enter a number: ";
+                continue;
+            }
+            if (choice >= 1 && choice <= words.size())
+            {
+                std::cout << "You chose: " << words[choice - 1] << "\n";
+                break;
+            }
+            std::cout << "Invalid input. Please enter a number: ";
+        }
+    }
+    std::cout << "Choose operation: \n[1] Confirm Delete\n[2] exit\n";
+    std::cout << "Enter your choice: ";
+    int opChoice = 1;
     while (true)
     {
-        std::cin >> choice;
+        std::cin >> opChoice;
         if (std::cin.fail())
         {
             std::cin.clear();                                                   // Clear the error flag
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
-            std::cout << "Invalid input. Please enter a number: ";
+            std::cout << "Invalid input. Please enter a number (1 or 2): ";
             continue;
         }
-        if (choice >= 1 && choice <= words.size())
-        {
-            std::cout << "You chose: " << words[choice - 1] << "\n";
+        if (opChoice == 1 || opChoice == 2)
             break;
-        }
-        std::cout << "Invalid input. Please enter a number: ";
+        std::cout << "Invalid choice. Please enter 1 for Delete, 2 for go back: ";
     }
-    // std::cout << "Choose operation: \n[1] Delete\n[2] go back\n";
-    int opChoice = 1;
-    // while (true)
-    // {
-    //     std::cin >> opChoice;
-    //     if (std::cin.fail())
-    //     {
-    //         std::cin.clear();                                                   // Clear the error flag
-    //         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
-    //         std::cout << "Invalid input. Please enter a number (1 or 2): ";
-    //         continue;
-    //     }
-    //     if (opChoice == 1 || opChoice == 2 )
-    //         break;
-    //     std::cout << "Invalid choice. Please enter 1 for Delete, 2 for go back: ";
-    // }
     if (opChoice == 1)
     {
         std::cout << "You chose to delete: " << words[choice - 1] << "\n";
@@ -462,7 +471,6 @@ void LiveInput::chooseSuggestedWord(std::string& input,int searchType,const std:
     else if (opChoice == 2)
     {
         std::cout << "Operation cancelled.\n";
-        return;
     }
     // if (opResult == 1){
     //     std::cout << "Operation successful!\n";
@@ -481,5 +489,33 @@ void LiveInput::chooseSuggestedWord(std::string& input,int searchType,const std:
     // {
     //     std::cout << "Operation failed!\n";
     // }
-    std::cout << "\n============================\n";
+    return;
+}
+
+void LiveInput::displayHeader(int searchType){
+    std::string choosenSearchType[3];
+    choosenSearchType[0] = "->'\033[36m~\033[0m' most frequently used           |\n";
+    choosenSearchType[1] = "->'\033[36m!\033[0m' lexicographical order          |\n";
+    choosenSearchType[2] = "->'\033[36m@\033[0m' Shortest first                 |\n";
+
+    if (searchType == 0)
+    {
+        choosenSearchType[0] = "\033[32m->\'~\' most frequently used\033[0m           |\n";
+    }
+    else if (searchType == 1)
+    {
+        choosenSearchType[1] = "\033[32m->\'!\' lexicographical order\033[0m          |\n";
+    }
+    else if (searchType == 2)
+    {
+        choosenSearchType[2] = "\033[32m->\'@\' Shortest first\033[0m                 |\n";
+    }
+    std::cout << "\n+ =========================================================================================================== +\n";
+    std::cout << "+ ========================= +\t+ =========== Options =========== +\t+ =========== Searching types ======= +\n";
+    std::cout << "|                           |\t|-> \'\033[36m\\\033[0m\' to insert or Delete       |\t|" + (choosenSearchType[0]);
+    std::cout << "|   Input text Down here    |\t|-> \033[36mTAB\033[0m to auto complete          |\t|" + (choosenSearchType[1]);
+    std::cout << "|                           |\t|-> \033[36mESC\033[0m to back to home menu      |\t|" + (choosenSearchType[2]);
+    std::cout << "+ ========================= +\t+ =============================== +\t+ =================================== +\n";
+    std::cout << "+ ----------------------------------------------------------------------------------------------------------- +\n";
+    std::cout << "+ ------------------------------------------- Enter input here ---------------------------------------------- +\n";
 }

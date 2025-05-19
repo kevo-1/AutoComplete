@@ -1,0 +1,10 @@
+# Running Code
+
+mkdir Build
+cd Build
+cmake .. -DCMAKE_BUILD_TYPE=Debug
+mingw32-make
+
+#or
+
+cmake --build . --verbose
