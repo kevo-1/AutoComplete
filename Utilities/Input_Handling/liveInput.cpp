@@ -15,6 +15,7 @@
 #include <termios.h>
 #include <unistd.h>
 #endif
+#include <cassert>
 
 //Belal
 //delete from map along with the trie[done]
@@ -57,7 +58,11 @@ std::string LiveInput::completeGreyedOut(std::vector<std::string>words,std::stri
         }
         for (int i = 0; i < pref.size(); i++)
         {
-            suggStack.pop();
+            if (!suggStack.empty())
+            {
+                suggStack.pop();
+            }
+            
         }
         while (!suggStack.empty())
         {
@@ -99,7 +104,12 @@ void LiveInput:: replaceWithSuggestion(std::vector<std::string> words,std::strin
         
         if (c==TAB || wordChoiceNum!=0)
         {
-            char lastChar=input.back();
+            char lastChar=0;
+            if (!input.empty())
+            {
+                lastChar=input.back();
+            }
+            
             
             while (lastChar!=SPACE && !input.empty())
             {
@@ -118,8 +128,10 @@ void LiveInput:: replaceWithSuggestion(std::vector<std::string> words,std::strin
             }
             else
             {
-                input.append(words[wordChoiceNum-1]);
-                input+=' ';
+                if (wordChoiceNum > 0 && wordChoiceNum <= words.size()) {
+                input.append(words[wordChoiceNum - 1]);
+                input += ' ';
+                }
             }
         }
 }
@@ -150,7 +162,7 @@ system("cls");
 #else
 system("clear");
 #endif
-std::cout << "Enter Backslash to choose suggested word! \n";
+std::cout << "Enter Backslash to choose operation(insert/delete)\n";
 std::cout << input <<"\033[2m"<<completeGreyedOut(words, input)<<"\033[0m\n";
 std::cout << "\n============================\n";
 std::cout << "Suggested words: \n";
@@ -203,7 +215,7 @@ void LiveInput::startLiveInput()
             input.append(1, c);
         }
         
-        
+        std::vector<std::string> words = getMatchingWords(input, searchType);
         if (c == ENTER_KEY || c == CARRIAGE_RETURN || c == ESCAPE)
             break;
         if (c == BACKSPACE || c == DELETE)
@@ -233,9 +245,9 @@ void LiveInput::startLiveInput()
                 std::string wordChoice = sanitizeWord(input);
                 mytrie.insertWord(wordChoice);
                 (*freq)[wordChoice] = 3;
-                std::cout << "Word inserted successfully!\n";
+                std::cout << "Word: "<<wordChoice<<" inserted successfully!\n";
             }else if (choice==2){
-                chooseSuggestedWord(input, 1);
+                chooseSuggestedWord(input, 1, words);
             }
             continue;
         }
@@ -250,8 +262,8 @@ void LiveInput::startLiveInput()
         
         chooseSearchType(c,searchType);
 
-        //moved this here in order to use it in completing using suggestions
-        std::vector<std::string> words = getMatchingWords(input, searchType);
+        // //moved this here in order to use it in completing using suggestions
+        // std::vector<std::string> words = getMatchingWords(input, searchType);
         
         
         replaceWithSuggestion(words,input,c);
@@ -391,10 +403,10 @@ std::vector<std::string> LiveInput::getMatchingWords(std::string input, int sear
 //     return -1; // return -1 if the operation is not valid
 // }
 
-void LiveInput::chooseSuggestedWord(std::string& input,int searchType)
+void LiveInput::chooseSuggestedWord(std::string& input,int searchType,const std::vector<std::string>& words)
 {
     std::cout << "\n============================\n";
-    std::vector<std::string> words = getMatchingWords(input, searchType);
+    // std::vector<std::string> words = getMatchingWords(input, searchType);
     // if no suggestions available get back.
     if (words.empty())
     {
@@ -420,22 +432,22 @@ void LiveInput::chooseSuggestedWord(std::string& input,int searchType)
         }
         std::cout << "Invalid input. Please enter a number: ";
     }
-    std::cout << "Choose operation: \n[1] Delete\n[2] go back\n";
-    int opChoice = 0;
-    while (true)
-    {
-        std::cin >> opChoice;
-        if (std::cin.fail())
-        {
-            std::cin.clear();                                                   // Clear the error flag
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
-            std::cout << "Invalid input. Please enter a number (1 or 2): ";
-            continue;
-        }
-        if (opChoice == 1 || opChoice == 2 )
-            break;
-        std::cout << "Invalid choice. Please enter 1 for Delete, 2 for go back: ";
-    }
+    // std::cout << "Choose operation: \n[1] Delete\n[2] go back\n";
+    int opChoice = 1;
+    // while (true)
+    // {
+    //     std::cin >> opChoice;
+    //     if (std::cin.fail())
+    //     {
+    //         std::cin.clear();                                                   // Clear the error flag
+    //         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
+    //         std::cout << "Invalid input. Please enter a number (1 or 2): ";
+    //         continue;
+    //     }
+    //     if (opChoice == 1 || opChoice == 2 )
+    //         break;
+    //     std::cout << "Invalid choice. Please enter 1 for Delete, 2 for go back: ";
+    // }
     if (opChoice == 1)
     {
         std::cout << "You chose to delete: " << words[choice - 1] << "\n";
